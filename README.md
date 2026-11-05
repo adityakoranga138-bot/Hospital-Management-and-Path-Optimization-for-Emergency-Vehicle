@@ -69,3 +69,8 @@ Member 1,3: Implemented main function
 Member 1,2,3,4: Included queue library in the code
 
 -------------------------------------------------------------------------------------
+
+## DAY 17
+Member 1: Implemnted exception hierarchy structure before patient class
+
+-------------------------------------------------------------------------------------
