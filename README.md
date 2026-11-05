@@ -73,4 +73,6 @@ Member 1,2,3,4: Included queue library in the code
 ## DAY 17
 Member 1: Implemnted exception hierarchy structure before patient class
 
+Member 1,4: Increased the no. of max_locations in the map with exceptions
+
 -------------------------------------------------------------------------------------
