@@ -4,6 +4,27 @@
 #include<queue>
 using namespace std;
 
+class SmartCareException : public runtime_error {
+public:
+    SmartCareException(const string &msg):runtime_error(msg) {
+    }
+};
+class WardFullException : public SmartCareException {
+public:
+    WardFullException(const string &msg):SmartCareException("[WARD SATURATED] "+msg) {
+    }
+};
+class InvalidNodeException : public SmartCareException {
+public:
+    InvalidNodeException(const string &msg):SmartCareException("[MAP ERROR] "+msg) {
+    }
+};
+class PatientNotFoundException : public SmartCareException {
+public:
+    PatientNotFoundException(const string& msg):SmartCareException("[RECORD ERROR] "+msg) {
+    }
+};
+
 class Patient {
 private:
     int id;
