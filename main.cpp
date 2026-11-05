@@ -128,13 +128,13 @@ public:
     }
 };
 
-int NUM_LOCATIONS = 10;
-int INF = 9999;
+const int NUM_LOCATIONS = 10;
+const int INF = 9999;
 
 class CityMap {
 private:
-    int roadMatrix[4][4];
-    string locationNames[4];
+    int roadMatrix[NUM_LOCATIONS][NUM_LOCATIONS];
+    string locationNames[NUM_LOCATIONS];
 
 public:
     CityMap() {
@@ -175,7 +175,10 @@ public:
         return "Unknown Location";
     }
 
-    int findFastestRoute(int startNode, int destNode, bool printPath = false) {    
+    int findFastestRoute(int startNode, int destNode, bool printPath = false) {  
+        if (startNode<0 || startNode>=NUM_LOCATIONS || destNode<0 || destNode>=NUM_LOCATIONS) {
+            throw InvalidNodeException("Invalid node coordinates");
+        }
         int d[NUM_LOCATIONS];
         bool visited[NUM_LOCATIONS];
         int parent[NUM_LOCATIONS];
@@ -212,6 +215,11 @@ public:
                 }
             }
         }
+
+        if (d[destNode] == INF) {
+            throw InvalidNodeException("No reachable road path found between selected origin and destination.");
+        }
+        
         if (printPath) {
             vector<int> path;
             int curr = destNode;
