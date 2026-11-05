@@ -128,7 +128,7 @@ public:
     }
 };
 
-int NUM_LOCATIONS = 4;
+int NUM_LOCATIONS = 10;
 int INF = 9999;
 
 class CityMap {
@@ -138,16 +138,27 @@ private:
 
 public:
     CityMap() {
-        locationNames[0] = "Accident Spot A";
-        locationNames[1] = "Junction B";
-        locationNames[2] = "City Center C";
-        locationNames[3] = "Central Hospital";
-
-        int defaultRoads[4][4] = {
-            {0, 6, INF, 14},
-            {6, 0, 5, 8},
-            {INF, 5, 0, 3},
-            {14, 8, 3, 0}
+        locationNames[0] = "Rajpur_road";
+        locationNames[1] = "Paltan_Bazar";
+        locationNames[2] = "Clock_tower";
+        locationNames[3] = "Prem_nagar";
+        locationNames[4] = "Clement_Town";
+        locationNames[5] = "Sahastradhara";
+        locationNames[6] = "Jakhan";
+        locationNames[7] = "Vasant_Vihar";
+        locationNames[8] = "Patel_Nagar";
+        locationNames[9] = "ISBT";
+        int defaultDistances[NUM_LOCATIONS][NUM_LOCATIONS] = {
+            {0, 4, 6, INF, INF, INF, INF, INF, INF, INF},
+            {4, 0, INF, 5, 7, INF, INF, INF, INF, INF},
+            {6, INF, 0, 3, INF, 8, INF, INF, INF, INF},
+            {INF, 5, 3, 0, 4, 6, INF, INF, INF, INF},
+            {INF, 7, INF, 4, 0, INF, 3, 6, INF, INF},
+            {INF, INF, 8, 6, INF, 0, INF, 5, 7, INF},
+            {INF, INF, INF, INF, 3, INF, 0, INF, INF, 4},
+            {INF, INF, INF, INF, 6, 5, INF, 0, 4, 5},
+            {INF, INF, INF, INF, INF, 7, INF, 4, 0, 6},
+            {INF, INF, INF, INF, INF, INF, 4, 5, 6, 0}
         };
 
         for (int i = 0; i < NUM_LOCATIONS; i++) {
@@ -164,11 +175,10 @@ public:
         return "Unknown Location";
     }
 
-    int findFastestRoute(int startNode, int destNode, bool printPath = false) {
-        int d[4];
-        bool visited[4];
-        int parent[4];
-
+    int findFastestRoute(int startNode, int destNode, bool printPath = false) {    
+        int d[NUM_LOCATIONS];
+        bool visited[NUM_LOCATIONS];
+        int parent[NUM_LOCATIONS];
         for (int i = 0; i < NUM_LOCATIONS; i++) {
             d[i] = INF;
             visited[i] = false;
@@ -202,8 +212,7 @@ public:
                 }
             }
         }
-
-        if (printPath && d[destNode] != INF) {
+        if (printPath) {
             vector<int> path;
             int curr = destNode;
 
