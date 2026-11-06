@@ -2,6 +2,8 @@
 #include<string>
 #include<vector>
 #include<queue>
+#include <fstream>
+#include <stdexcept>
 using namespace std;
 
 class SmartCareException : public runtime_error {
@@ -245,6 +247,7 @@ public:
 };
 
 int MAX_BEDS = 100;
+const int HOSPITAL_NODE = 9;
 
 class HospitalSystem {
 private:
@@ -342,10 +345,12 @@ public:
         return admittedPatients.size();
     }
 
-    bool queueEmergencyCall(int pickupLoc, int id, string name, int priority) {
-        if (pickupLoc < 0 || pickupLoc > 2) {
-            cout << "[ERROR] Invalid pickup location index! Node not found." << endl;
-            return false;
+    void queueEmergencyCall(int pickupLoc, int id, string name, int priority) {
+        if (pickupLoc < 0 || pickupLoc >= NUM_LOCATIONS - 1) {
+            throw InvalidNodeException ("Pickup location must be between 0 and 8 (Node 9 is Central Hospital).");
+        }
+        if (priority != 1 && priority != 2) {
+            throw SmartCareException("[TRIAGE ERROR] Priority must be 1 (Critical) or 2 (Normal).");
         }
 
         int bedType = (priority == 1) ? 2 : 1;
@@ -353,8 +358,6 @@ public:
 
         cout << "[TRIAGE QUEUE] Emergency call logged for " << name
              << " (Severity Rank: " << (priority == 1 ? "1 - Critical" : "2 - Normal") << ")" << endl;
-
-        return true;
     }
 
     void processNextDispatch() {
@@ -362,11 +365,8 @@ public:
             cout << "[QUEUE EMPTY] No pending emergency vehicle calls." << endl;
             return;
         }
-
         if (!hasBedAvailable()) {
-            cout << "[ALERT] All " << MAX_BEDS << " hospital beds are occupied!" << endl;
-            cout << "[ACTION] Emergency vehicle NOT sent. Patient diverted to external facility." << endl;
-            return;
+            throw WardFullException("All 100 beds occupied! Dispatch halted; reroute patient.");
         }
 
         Patient nextPatient = dispatchQueue.top();
@@ -383,6 +383,7 @@ public:
         nextPatient.setAmbulanceFare(fare);
 
         admittedPatients.push_back(nextPatient);
+        savePatientsToFile();
 
         cout << "Name : " << nextPatient.getName() << endl;
         cout << "Patient ID : " << nextPatient.getId() << endl;
@@ -449,9 +450,8 @@ public:
         cout << "--------------------------------------------" << endl;
     }
 
-    bool dischargePatient(int patientId, int daysStayed) {
+    void dischargePatient(int patientId, int daysStayed) {
         int foundIndex = -1;
-
         for (size_t i = 0; i < admittedPatients.size(); i++) {
             if (admittedPatients[i].getId() == patientId) {
                 foundIndex = i;
@@ -460,8 +460,7 @@ public:
         }
 
         if (foundIndex == -1) {
-            cout << "[ERROR] Patient ID " << patientId << " not found in active ward records!" << endl;
-            return false;
+            throw PatientNotFoundException( "Patient ID " + to_string(patientId) + " is not registered in active ward beds.");
         }
 
         Patient p = admittedPatients[foundIndex];
@@ -485,8 +484,6 @@ public:
 
         admittedPatients.erase(admittedPatients.begin() + foundIndex);
         cout << "[SYSTEM] Bed slot deallocated. Record safely cleared." << endl;
-
-        return true;
     }
 };
 
