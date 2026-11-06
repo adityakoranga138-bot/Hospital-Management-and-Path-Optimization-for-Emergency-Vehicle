@@ -376,23 +376,27 @@ public:
         cout << "  EMERGENCY VEHICLE DISPATCHED & PATIENT ADMITTED" << endl;
         cout << "============================================" << endl;
 
-        int travelTime = cityMap.findFastestRoute(nextPatient.getPickupLocation(), 3, true);
-        int fare = travelTime * 50;
+        int distanceKm = cityMap.findShortestDistance(nextPatient.getPickupLocation(), HOSPITAL_NODE, true);
+        int estimatedTimeMins = (distanceKm * 60) / 40;
+        if (estimatedTimeMins < 1) estimatedTimeMins = 1;
+        int fare = distanceKm * 60;
         nextPatient.setAmbulanceFare(fare);
 
         admittedPatients.push_back(nextPatient);
 
         cout << "Name : " << nextPatient.getName() << endl;
         cout << "Patient ID : " << nextPatient.getId() << endl;
-        cout << "Condition Triage : " << (nextPatient.getPriority() == 1 ? "PRIORITY 1 - Critical (Heart Attack)" : "PRIORITY 2 - Normal (Fever)") << endl;
+        cout << "Condition : " << (nextPatient.getPriority() == 1 ? "Critical (ICU Reserved)" : "Normal (General Ward)") << endl;
         cout << "Pickup Point : " << cityMap.getLocationName(nextPatient.getPickupLocation()) << endl;
-        cout << "Estimated Transit : " << travelTime << " minutes" << endl;
-        cout << "Ambulance Fare : Rs. " << fare << endl;
-        cout << "Reserved Bed Slot : Bed " << admittedPatients.size() << " (" << (nextPatient.getBedType() == 1 ? "General Ward" : "ICU") << ")" << endl;
+        cout << "Route Distance : " << distanceKm << " km" << endl;
+        cout << "Est. Transit Time : " << estimatedTimeMins << " mins (at 40 km/h avg speed)" << endl;
+        cout << "Ambulance Fare : Rs. " << fare << " (at Rs. 60/km)" << endl;
+        cout << "Bed Assigned : Bed " << admittedPatients.size() << " / " << MAX_BEDS << " (" 
+             << (nextPatient.getBedType() == 1 ? "General Ward" : "ICU") << ")" << endl;
         cout << "============================================" << endl;
     }
 
-    void displayQueueStatus() {
+    void displayQueueStatus() const {
         cout << endl << "--------------------------------------------" << endl;
         cout << "  PENDING EMERGENCY CALLS (" << dispatchQueue.size() << " in queue)" << endl;
         cout << "--------------------------------------------" << endl;
