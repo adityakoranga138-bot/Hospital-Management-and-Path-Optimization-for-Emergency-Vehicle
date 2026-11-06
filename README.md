@@ -66,7 +66,7 @@ Member 1,3: Implemented main function
 -------------------------------------------------------------------------------------
 
 ## DAY 13,14,15,16
-Member 1,2,3,4: Included queue library in the code
+Member 1,2,3,4: Included queue library in the code and implementing the priority queue for the whole project
 
 -------------------------------------------------------------------------------------
 
@@ -74,5 +74,11 @@ Member 1,2,3,4: Included queue library in the code
 Member 1: Implemnted exception hierarchy structure before patient class
 
 Member 1,4: Increased the no. of max_locations in the map with exceptions
+
+-------------------------------------------------------------------------------------
+## DAY 18
+Member 1,3,4: Implemented the dijkstra's algo with distanced edge weighgs (improvement from phase-2).
+
+Member 1,3: Added the exceptions and text files with required file handling operations inside the HospitalSystem class
 
 -------------------------------------------------------------------------------------
