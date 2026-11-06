@@ -253,11 +253,85 @@ private:
     CityMap cityMap;
     vector<Medicine> pharmacy;
 
+    const string PATIENT_FILE = "admitted_patients.txt";
+    const string PHARMACY_FILE = "pharmacy_stock.txt";
+    const string INVOICE_LOG = "invoices_log.txt";
+
 public:
     HospitalSystem() {
-        pharmacy.push_back(Medicine("Paracetamol", 50, 5.0));
-        pharmacy.push_back(Medicine("Amoxicillin", 30, 15.0));
-        pharmacy.push_back(Medicine("Ibuprofen", 40, 8.0));
+        loadPharmacyFromFile();
+        loadPatientsFromFile();
+    }
+
+    ~HospitalSystem() {
+        savePatientsToFile();
+        savePharmacyToFile();
+    }
+
+    void savePatientsToFile() {
+        ofstream outFile(PATIENT_FILE);
+        if (!outFile) return;
+        outFile << admittedPatients.size() << "\n";
+        for (const auto& p : admittedPatients) {
+            outFile << p.getId() << " "
+                    << p.getName() << " "
+                    << p.getPriority() << " "
+                    << p.getBedType() << " "
+                    << p.getAmbulanceFare() << " "
+                    << p.getPickupLocation() << "\n";
+        }
+        outFile.close();
+    }
+
+    void loadPatientsFromFile() {
+        ifstream inFile(PATIENT_FILE);
+        if (!inFile) return;
+        int totalCount = 0;
+        if (inFile >> totalCount) {
+            admittedPatients.clear();
+            for (int i = 0; i < totalCount; i++) {
+                int id, priority, bedType, fare, loc;
+                string name;
+                if (inFile >> id >> name >> priority >> bedType >> fare >> loc) {
+                    admittedPatients.push_back(Patient(id, name, priority, bedType, fare, loc));
+                }
+            }
+        }
+        inFile.close();
+    }
+
+    void savePharmacyToFile() {
+        ofstream outFile(PHARMACY_FILE);
+        if (!outFile) return;
+        outFile << pharmacy.size() << "\n";
+        for (const auto& m : pharmacy) {
+            outFile << m.getName() << " " << m.getStock() << " " << m.getPrice() << "\n";
+        }
+        outFile.close();
+    }
+
+    void loadPharmacyFromFile() {
+        ifstream inFile(PHARMACY_FILE);
+        if (!inFile) {
+            pharmacy.push_back(Medicine("Paracetamol", 50, 5.0f));
+            pharmacy.push_back(Medicine("Amoxicillin", 30, 15.0f));
+            pharmacy.push_back(Medicine("Ibuprofen", 40, 8.0f));
+            savePharmacyToFile();
+            return;
+        }
+        int totalCount = 0;
+        if (inFile >> totalCount) {
+            pharmacy.clear();
+            for (int i = 0; i < totalCount; i++) {
+                string name;
+                int stock;
+                float price;
+                if (inFile >> name >> stock >> price) {
+                    pharmacy.push_back(Medicine(name, stock, price));
+                }
+            }
+        }
+        inFile.close();
     }
 
     bool hasBedAvailable() {
