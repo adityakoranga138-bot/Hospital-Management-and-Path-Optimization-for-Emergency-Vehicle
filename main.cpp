@@ -149,7 +149,7 @@ public:
         locationNames[6] = "Jakhan";
         locationNames[7] = "Vasant_Vihar";
         locationNames[8] = "Patel_Nagar";
-        locationNames[9] = "ISBT";
+        locationNames[9] = "Central_Hospital";
         int defaultDistances[NUM_LOCATIONS][NUM_LOCATIONS] = {
             {0, 4, 6, INF, INF, INF, INF, INF, INF, INF},
             {4, 0, INF, 5, 7, INF, INF, INF, INF, INF},
@@ -165,7 +165,7 @@ public:
 
         for (int i = 0; i < NUM_LOCATIONS; i++) {
             for (int j = 0; j < NUM_LOCATIONS; j++) {
-                roadMatrix[i][j] = defaultRoads[i][j];
+                roadMatrix[i][j] = defaultDistances[i][j];
             }
         }
     }
@@ -177,7 +177,7 @@ public:
         return "Unknown Location";
     }
 
-    int findFastestRoute(int startNode, int destNode, bool printPath = false) {  
+    int findShortestDistance(int startNode, int destNode, bool printPath = false) {  
         if (startNode<0 || startNode>=NUM_LOCATIONS || destNode<0 || destNode>=NUM_LOCATIONS) {
             throw InvalidNodeException("Invalid node coordinates");
         }
@@ -482,8 +482,32 @@ public:
         cout << "TOTAL PAYABLE    : Rs. " << totalBill << endl;
         cout << "============================================" << endl;
 
+        string receiptFileName = "receipt_" + to_string(p.getId()) + ".txt";
+        ofstream receipt(receiptFileName);
+        if (receipt) {
+            receipt << "SMARTCARE HOSPITAL DISCHARGE RECEIPT\n";
+            receipt << "------------------------------------\n";
+            receipt << "Patient ID: " << p.getId() << "\n";
+            receipt << "Name: " << p.getName() << "\n";
+            receipt << "Ward: " << (p.getBedType() == 1 ? "General Ward" : "ICU") << "\n";
+            receipt << "Days Stayed: " << daysStayed << "\n";
+            receipt << "Ambulance Transit Fee: Rs. " << p.getAmbulanceFare() << "\n";
+            receipt << "Room Rent: Rs. " << roomRent << "\n";
+            receipt << "Total Paid: Rs. " << totalBill << "\n";
+            receipt.close();
+            cout << "[FILE EXPORT] Individual receipt saved to '" << receiptFileName << "'" << endl;
+        }
+
+        ofstream ledger(INVOICE_LOG, ios::app);
+        if (ledger) {
+            ledger << "ID:" << p.getId() << " | Name:" << p.getName() 
+                   << " | Days:" << daysStayed << " | Total:Rs." << totalBill << "\n";
+            ledger.close();
+        }
+
         admittedPatients.erase(admittedPatients.begin() + foundIndex);
-        cout << "[SYSTEM] Bed slot deallocated. Record safely cleared." << endl;
+        savePatientsToFile();
+        cout << "[SYSTEM] Bed slot deallocated. Patient record archived safely." << endl;
     }
 };
 
