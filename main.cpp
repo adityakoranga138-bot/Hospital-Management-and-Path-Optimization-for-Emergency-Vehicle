@@ -2,28 +2,28 @@
 #include<string>
 #include<vector>
 #include<queue>
-#include <fstream>
-#include <stdexcept>
+#include<fstream>
+#include<stdexcept>
 using namespace std;
 
 class SmartCareException : public runtime_error {
 public:
-    SmartCareException(const string &msg):runtime_error(msg) {
+    SmartCareException(const string &msg) : runtime_error(msg) {
     }
 };
 class WardFullException : public SmartCareException {
 public:
-    WardFullException(const string &msg):SmartCareException("[WARD SATURATED] "+msg) {
+    WardFullException(const string &msg) : SmartCareException("[WARD SATURATED] "+msg) {
     }
 };
 class InvalidNodeException : public SmartCareException {
 public:
-    InvalidNodeException(const string &msg):SmartCareException("[MAP ERROR] "+msg) {
+    InvalidNodeException(const string &msg) : SmartCareException("[MAP ERROR] "+msg) {
     }
 };
 class PatientNotFoundException : public SmartCareException {
 public:
-    PatientNotFoundException(const string& msg):SmartCareException("[RECORD ERROR] "+msg) {
+    PatientNotFoundException(const string& msg) : SmartCareException("[RECORD ERROR] "+msg) {
     }
 };
 
@@ -55,27 +55,27 @@ public:
         pickupLocation = pLoc;
     }
 
-    int getId() {
+    int getId() const{
         return id;
     }
 
-    string getName() {
+    string getName() const{
         return name;
     }
 
-    int getPriority() {
+    int getPriority() const{
         return priority;
     }
 
-    int getBedType() {
+    int getBedType() const{
         return bedType;
     }
 
-    int getAmbulanceFare() {
+    int getAmbulanceFare() const{
         return ambulanceFare;
     }
 
-    int getPickupLocation() {
+    int getPickupLocation() const{
         return pickupLocation;
     }
 
@@ -109,15 +109,15 @@ public:
         price = mPrice;
     }
 
-    string getName() {
+    string getName() const{
         return name;
     }
 
-    int getStock() {
+    int getStock() const{
         return stock;
     }
 
-    float getPrice() {
+    float getPrice() const{
         return price;
     }
 
@@ -338,7 +338,7 @@ public:
     }
 
     bool hasBedAvailable() {
-        return admittedPatients.size() < MAX_BEDS;
+        return admittedPatients.size() < static_cast<size_t>(MAX_BEDS);
     }
 
     int getOccupiedCount() {
@@ -370,13 +370,13 @@ public:
         }
 
         Patient nextPatient = dispatchQueue.top();
+        int distanceKm = cityMap.findShortestDistance(nextPatient.getPickupLocation(), HOSPITAL_NODE, true);
         dispatchQueue.pop();
 
         cout << endl << "============================================" << endl;
         cout << "  EMERGENCY VEHICLE DISPATCHED & PATIENT ADMITTED" << endl;
         cout << "============================================" << endl;
 
-        int distanceKm = cityMap.findShortestDistance(nextPatient.getPickupLocation(), HOSPITAL_NODE, true);
         int estimatedTimeMins = (distanceKm * 60) / 40;
         if (estimatedTimeMins < 1) estimatedTimeMins = 1;
         int fare = distanceKm * 60;
@@ -523,7 +523,7 @@ int main() {
         cout << "3. Dispatch Ambulance (Highest Priority First)" << endl;
         cout << "4. View Ward Beds & Call Queue Status" << endl;
         cout << "5. View Pharmacy Inventory" << endl;
-        cout << "6. Discharge Patient & Generate Final Bill" << endl;
+        cout << "6. Discharge Patient & Export File Receipt" << endl;
         cout << "7. Exit System" << endl;
         cout << "Enter your choice (1-7): ";
 
@@ -543,15 +543,25 @@ int main() {
                 }
 
                 int fromNode;
-                cout << endl << "Enter pickup node (0-2) to test transit to Central Hospital (3): ";
+                cout << endl << "Enter pickup node (0-8) to test route to Central Hospital (9): ";
                 cin >> fromNode;
 
-                if (fromNode < 0 || fromNode > 2) {
+                if (fromNode < 0 || fromNode > 8) {
                     cout << "[ERROR] Node does not exist on map." << endl;
-                } else {
-                    cout << endl;
-                    int time = map.findFastestRoute(fromNode, 3, true);
-                    cout << "Dijkstra optimal transit time: " << time << " mins." << endl;
+                } 
+                else {
+                    try {
+                        cout << endl;
+                        int dist = map.findShortestDistance(fromNode, HOSPITAL_NODE, true);
+                        cout << "Dijkstra optimal distance: " << dist << " km." << endl;
+                        int estTime = (dist * 60) / 40;
+                        if (estTime < 1)
+                            estTime = 1;
+                        cout << "Estimated transit duration: " << estTime << " mins (at 40 km/h avg speed)." << endl;
+                    } 
+                    catch (const SmartCareException& e) {
+                        cout << e.what() << endl;
+                    }
                 }
 
                 break;
@@ -562,7 +572,7 @@ int main() {
                 string pName;
 
                 cout << endl << "--- REGISTER EMERGENCY CALL ---" << endl;
-                cout << "Select Pickup Location (0: Spot A, 1: Junction B, 2: City Center C): ";
+                cout << "Pickup Node (0 to 8): ";
                 cin >> pickupLoc;
                 cout << "Enter Patient ID: ";
                 cin >> pId;
@@ -571,13 +581,23 @@ int main() {
                 cout << "Condition Severity (1 = Critical/Heart Attack, 2 = Normal/Fever): ";
                 cin >> condition;
 
-                hospital.queueEmergencyCall(pickupLoc, pId, pName, condition);
+                try {
+                    hospital.queueEmergencyCall(pickupLoc, pId, pName, condition);
+                } 
+                catch (const SmartCareException& e) {
+                    cout << e.what() << endl;
+                }
                 break;
             }
 
             case 3: {
                 cout << endl << "[DISPATCH] Checking ward capacity and retrieving priority call..." << endl;
-                hospital.processNextDispatch();
+                try {
+                    hospital.processNextDispatch();
+                } 
+                catch (const SmartCareException& e) {
+                    cout << e.what() << endl;
+                }
                 break;
             }
 
@@ -602,12 +622,17 @@ int main() {
                 if (days < 1)
                     days = 1;
 
-                hospital.dischargePatient(pId, days);
+                try {
+                    hospital.dischargePatient(pId, days);
+                } 
+                catch (const SmartCareException& e) {
+                    cout << e.what() << endl;
+                }
                 break;
             }
 
             case 7:
-                cout << endl << "Exiting SmartCare System. Prototype active." << endl;
+                cout << endl << "Exiting SmartCare System and saving records." << endl;
                 break;
 
             default:
