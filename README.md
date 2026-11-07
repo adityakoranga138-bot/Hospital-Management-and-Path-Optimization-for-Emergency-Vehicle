@@ -85,4 +85,6 @@ Member 1,3: Added the exceptions and text files with proper/required file handli
 ## DAY 19
 Member 1:  Implemented pending exception handling and file management after the final invoice of the patient inside HospitalSystem class
 
+Member 1,2,3,4: Finalized the main.cpp code of the project
+
 -------------------------------------------------------------------------------------
