@@ -82,3 +82,7 @@ Member 1,3,4: Implemented the dijkstra's algo with distanced edge weighgs (impro
 Member 1,3: Added the exceptions and text files with required file handling operations inside the HospitalSystem class
 
 -------------------------------------------------------------------------------------
+## DAY 19
+Member 1:  Implemented pending exception handling and the file management after the final invoice of the patient from the hospital
+
+-------------------------------------------------------------------------------------
