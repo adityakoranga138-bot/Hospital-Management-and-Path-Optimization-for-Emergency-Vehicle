@@ -77,12 +77,12 @@ Member 1,4: Increased the no. of max_locations in the map with exceptions
 
 -------------------------------------------------------------------------------------
 ## DAY 18
-Member 1,3,4: Implemented the dijkstra's algo with distanced edge weighgs (improvement from phase-2).
+Member 1,3,4: Implemented the dijkstra's algo with distanced edge weights (improvement from phase-2).
 
-Member 1,3: Added the exceptions and text files with required file handling operations inside the HospitalSystem class
+Member 1,3: Added the exceptions and text files with proper/required file handling operations inside the HospitalSystem class
 
 -------------------------------------------------------------------------------------
 ## DAY 19
-Member 1:  Implemented pending exception handling and the file management after the final invoice of the patient from the hospital
+Member 1:  Implemented pending exception handling and file management after the final invoice of the patient inside HospitalSystem class
 
 -------------------------------------------------------------------------------------
