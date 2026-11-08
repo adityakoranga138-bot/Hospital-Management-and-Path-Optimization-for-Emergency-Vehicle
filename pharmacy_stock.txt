@@ -1,0 +1,4 @@
+3
+Paracetamol 50 5
+Amoxicillin 30 15
+Ibuprofen 40 8

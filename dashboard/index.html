@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCare Emergency Hospital</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">SC</div>
+      <div>
+        <h1>SmartCare</h1>
+        <p>Emergency Command</p>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="overview">Overview</button>
+      <button class="nav-btn" data-view="map">City Map &amp; Routes</button>
+      <button class="nav-btn" data-view="emergency">Register Emergency</button>
+      <button class="nav-btn" data-view="dispatch">Ambulance Dispatch</button>
+      <button class="nav-btn" data-view="wards">Ward Beds</button>
+      <button class="nav-btn" data-view="pharmacy">Pharmacy</button>
+      <button class="nav-btn" data-view="discharge">Discharge &amp; Billing</button>
+    </nav>
+    <div class="sidebar-foot">
+      <span class="dot"></span>
+      C++ backend · 100 beds · Dijkstra routing
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h2 id="page-title">Overview</h2>
+        <p id="page-sub">Live occupancy, triage queue and hospital capacity from HospitalSystem.</p>
+      </div>
+      <button id="refresh-btn" class="btn ghost">Refresh data</button>
+    </header>
+
+    <div id="alert" class="alert hidden"></div>
+
+    <section id="view-overview" class="view">
+      <div class="stats">
+        <article class="stat">
+          <span>Occupied beds</span>
+          <strong id="stat-occupied">—</strong>
+          <em id="stat-capacity">/ 100</em>
+        </article>
+        <article class="stat">
+          <span>Beds available</span>
+          <strong id="stat-available">—</strong>
+        </article>
+        <article class="stat">
+          <span>Triage queue</span>
+          <strong id="stat-queue">—</strong>
+        </article>
+        <article class="stat">
+          <span>Next dispatch</span>
+          <strong id="stat-next">—</strong>
+          <em id="stat-next-pri"></em>
+        </article>
+      </div>
+      <div class="panel">
+        <h3>Ward occupancy</h3>
+        <div class="meter"><div id="occupancy-bar"></div></div>
+        <p id="occupancy-label" class="muted">Loading…</p>
+      </div>
+    </section>
+
+    <section id="view-map" class="view hidden">
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Test Dijkstra route to Central Hospital</h3>
+          <form id="route-form" class="form">
+            <label>Pickup node (0–8)
+              <select id="route-from" required></select>
+            </label>
+            <button class="btn" type="submit">Compute shortest path</button>
+          </form>
+          <div id="route-result" class="result"></div>
+        </div>
+        <div class="panel map-panel">
+          <h3>City network</h3>
+          <svg id="city-map" viewBox="0 0 640 420" role="img" aria-label="City map"></svg>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-emergency" class="view hidden">
+      <div class="panel">
+        <h3>Register emergency call</h3>
+        <p class="muted">Pushes a Patient onto the C++ min-heap triage queue. Names must be a single word.</p>
+        <form id="emergency-form" class="form">
+          <label>Pickup location
+            <select id="em-pickup" required></select>
+          </label>
+          <label>Patient ID
+            <input id="em-id" type="number" min="1" required />
+          </label>
+          <label>Patient name
+            <input id="em-name" type="text" required placeholder="Ravi" />
+          </label>
+          <label>Severity
+            <select id="em-priority" required>
+              <option value="1">1 — Critical (ICU)</option>
+              <option value="2">2 — Normal (General Ward)</option>
+            </select>
+          </label>
+          <button class="btn" type="submit">Queue emergency</button>
+        </form>
+        <div id="emergency-result" class="result"></div>
+      </div>
+    </section>
+
+    <section id="view-dispatch" class="view hidden">
+      <div class="panel">
+        <h3>Dispatch next ambulance</h3>
+        <p class="muted">Pops the highest-priority call, runs Dijkstra to node 9, assigns a bed, and persists the record.</p>
+        <p id="dispatch-next" class="banner">Checking queue…</p>
+        <button id="dispatch-btn" class="btn danger">Dispatch ambulance</button>
+        <div id="dispatch-result" class="result"></div>
+      </div>
+    </section>
+
+    <section id="view-wards" class="view hidden">
+      <div class="panel">
+        <h3>Admitted patients</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Bed</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Ward</th>
+                <th>Ambulance (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody id="ward-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-pharmacy" class="view hidden">
+      <div class="cards" id="pharmacy-cards"></div>
+    </section>
+
+    <section id="view-discharge" class="view hidden">
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Discharge patient</h3>
+          <form id="discharge-form" class="form">
+            <label>Patient ID
+              <select id="dis-id" required></select>
+            </label>
+            <label>Days stayed
+              <input id="dis-days" type="number" min="1" value="1" required />
+            </label>
+            <button class="btn" type="submit">Generate invoice</button>
+          </form>
+        </div>
+        <div class="panel invoice" id="invoice-panel">
+          <h3>Invoice</h3>
+          <p class="muted">Discharge a patient to see the C++ billing receipt here.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
