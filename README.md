@@ -88,3 +88,9 @@ Member 1:  Implemented pending exception handling and file management after the 
 Member 1,2,3,4: Finalized the main.cpp code of the project
 
 -------------------------------------------------------------------------------------
+## DAY 20
+Member 1,2,3,4: 
+* Took assistance from AI tools to understand GUI and implement backend integration
+* Successfully tested the GUI-backend integration and uploaded the GUI files and supporting libraries to repository
+
+-------------------------------------------------------------------------------------
