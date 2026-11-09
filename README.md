@@ -84,16 +84,19 @@ The frontend communicates with the C++ backend through the following HTTP endpoi
 ```
 PBL-Project/
 │
+├── dashboard/
+├── screenshots/
+│   ├── dashboard.png
+│   ├── emergency.png
+│   ├── dispatch.png
+│   ├── beds.png
+│   └── pharmacy.png
+│
 ├── main.cpp
 ├── smartcare_server.cpp
 ├── httplib.h
 ├── pharmacy_stock.txt
-├── README.md
-│
-└── dashboard/
-    ├── index.html
-    ├── styles.css
-    └── app.js
+└── README.md
 ```
 
 ## DSA and OOP Implementation
