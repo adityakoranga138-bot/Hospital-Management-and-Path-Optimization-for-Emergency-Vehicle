@@ -1,96 +1,132 @@
-# 3rd Semester PBL-Project
+# SmartCare – Emergency Hospital Management System
 
-## Title : Hospital Selection and Path Optimization for Emergency Vehicle
+A C++-based Emergency Hospital Management System designed to streamline emergency patient registration, ambulance dispatch, hospital bed allocation, pharmacy inventory management, and patient discharge. The system uses Data Structures and Algorithms (DSA), Object-Oriented Programming (OOP), and a web-based dashboard connected to a C++ backend through an HTTP server.
 
-## Team Name : Code Titans
+## Features
 
-## Team member 1 (Team Lead)
-Name = Ashutosh Shukla
+* Emergency patient registration with condition-based triage priority.
+* Priority-based emergency queue using `std::priority_queue`.
+* Ambulance dispatch based on emergency priority.
+* Shortest route calculation using Dijkstra's algorithm on a weighted city graph.
+* Route distance, estimated transit time, and ambulance fare calculation.
+* Automatic hospital bed allocation based on availability and ward requirements.
+* Hospital ward occupancy and bed availability tracking.
+* Pharmacy inventory management with medicine stock and pricing.
+* Patient discharge and automated billing.
+* Individual patient receipt generation.
+* File handling for storing patient records, pharmacy stock, and invoices.
+* Interactive web dashboard for accessing hospital management modules.
+* C++ backend integrated with the frontend using the `cpp-httplib` HTTP library.
 
-University Roll Number = 2518253
+## Tech Stack
 
-Student ID = 25101280233
+* **Programming Language**: C++ (C++11)
+* **Frontend**: HTML, CSS, JavaScript
+* **Backend**: C++ HTTP Server using `cpp-httplib`
+* **Data Structures**: Priority Queue, Weighted Graph, Adjacency Matrix, Vectors, Maps
+* **Algorithms**: Dijkstra's Shortest Path Algorithm
+* **OOP Concepts**: Classes, Objects, Encapsulation, Constructors, Destructors, Exception Handling
+* **File Handling**: C++ File I/O
 
-## Team member 2
-Name = Ashish Singh Negi
+## Run on Windows (MinGW / g++)
 
-University Roll Number = 2518248
+Make sure MinGW g++ is installed and available in your system PATH.
 
-Student ID = 25101280414
 
-## Team member 3
-Name = Aryan Singh
 
-University Roll Number = 2518241
+Open the project folder in VS Code or Cursor and run the following command in the terminal:
 
-Student ID = 25101286805
+```bash
+g++ -std=c++11 smartcare_server.cpp -o smartcare_server.exe -lws2_32
+```
 
-## Team member 4
-Name = Aditya Koranga
+After successful compilation, start the server:
 
-University Roll Number = 2518149
+```bash
+.\smartcare_server.exe
+```
 
-Student ID = 25101281241
+The C++ backend server will start locally.
 
--------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------
+Open the following address in your browser:
 
-## DAY 1
-Member 1 : Implementation of basic classes which will act as base for the project.
+[http://127.0.0.1:8080]
 
--------------------------------------------------------------------------------------
+Keep the terminal running while using the dashboard. To stop the server, press Ctrl + C.
 
-## DAY 2,3,4
-Member 1, 4 : Initialised city map and 2d matrix to store locations of the places.
+## Dashboard Modules
 
--------------------------------------------------------------------------------------
+The dashboard provides the following sections:
 
-## DAY 5,6,7
-Member 1, 4 : Initialised simple fastest transit route comparison.
+* **Overview**: Displays occupied beds, available beds, triage queue status, and next dispatch information.
+* **City Map & Routes**: Provides access to city locations and route calculations.
+* **Register Emergency**: Allows registration of emergency patient details.
+* **Ambulance Dispatch**: Processes emergency calls and displays dispatch information.
+* **Ward Beds**: Displays patient admission and hospital bed occupancy.
+* **Pharmacy**: Displays medicine inventory and stock information.
+* **Discharge & Billing**: Handles patient discharge and generates billing receipts.
 
--------------------------------------------------------------------------------------
+## API Endpoints
 
-## DAY 8
-Member 1, 2 : Included vector library and dynamic patients information.
+The frontend communicates with the C++ backend through the following HTTP endpoints:
 
--------------------------------------------------------------------------------------
+* `GET /api/locations` — Retrieve available city locations.
+* `GET /api/status` — Retrieve hospital status and emergency queue information.
+* `GET /api/beds` — Retrieve ward occupancy and patient bed information.
+* `GET /api/pharmacy` — Retrieve pharmacy inventory.
+* `GET /api/route?from=<location>` — Calculate the shortest route from a selected location.
+* `POST /api/emergency` — Register a new emergency patient.
+* `POST /api/dispatch` — Process the next emergency ambulance dispatch.
+* `POST /api/discharge` — Discharge a patient and generate the billing receipt.
 
-## DAY 9,10
-Member 2: Implemented patient admission confirmation and hospital bed occupancy display.
+## Project Structure
 
--------------------------------------------------------------------------------------
+```
+PBL-Project/
+│
+├── main.cpp
+├── smartcare_server.cpp
+├── httplib.h
+├── pharmacy_stock.txt
+├── README.md
+│
+└── dashboard/
+    ├── index.html
+    ├── styles.css
+    └── app.js
+```
 
-## DAY 11,12
-Member 1,3: Implemented main function
+## DSA and OOP Implementation
 
--------------------------------------------------------------------------------------
+* **Priority Queue**: Used to manage emergency patients according to their triage priority.
+* **Weighted Graph**: Represents the city road network with distances between locations.
+* **Dijkstra's Algorithm**: Calculates the shortest route for ambulance dispatch.
+* **Vectors and Maps**: Used for storing and managing relevant hospital and graph data.
+* **Exception Handling**: Handles exceptional situations such as unavailable beds, invalid locations, and missing patients.
+* **File Handling**: Maintains patient records, pharmacy inventory, and invoice information.
 
-## DAY 13,14,15,16
-Member 1,2,3,4: Included queue library in the code and implementing the priority queue for the whole project
+## Notes
 
--------------------------------------------------------------------------------------
+* This project is developed for academic and educational purposes.
+* The application runs locally using a C++ HTTP server.
+* The dashboard requires the C++ backend server to be running.
+* The `httplib.h` header provides the HTTP server functionality.
+* Patient records, pharmacy inventory, and invoices use local file storage.
+* The system is an academic demonstration and is not intended to replace a real hospital emergency management system.
+* AI tools were used as an aid in understanding and implementing parts of the backend integration due to the team's limited prior experience with backend development.
 
-## DAY 17
-Member 1: Implemnted exception hierarchy structure before patient class
+## Future Scope
 
-Member 1,4: Increased the no. of max_locations in the map with exceptions
+* Integration with a real-time GPS and mapping service.
+* Improved patient record management and authentication.
+* Real-time ambulance tracking.
+* Online appointment and hospital registration facilities.
+* Enhanced reporting and analytics for hospital administration.
 
--------------------------------------------------------------------------------------
-## DAY 18
-Member 1,3,4: Implemented the dijkstra's algo with distanced edge weights (improvement from phase-2).
+## Team Project
 
-Member 1,3: Added the exceptions and text files with proper/required file handling operations inside the HospitalSystem class
+Developed as part of the Problem-Based Learning (PBL) project.
 
--------------------------------------------------------------------------------------
-## DAY 19
-Member 1:  Implemented pending exception handling and file management after the final invoice of the patient inside HospitalSystem class
+**Project**: SmartCare – Emergency Hospital Management System
 
-Member 1,2,3,4: Finalized the main.cpp code of the project
-
--------------------------------------------------------------------------------------
-## DAY 20
-Member 1,2,3,4: 
-* Took assistance from AI tools to understand GUI and implement backend integration
-* Successfully tested the GUI-backend integration and uploaded the GUI files and supporting libraries to repository
-
--------------------------------------------------------------------------------------
+**Repository**: PBL-Project
