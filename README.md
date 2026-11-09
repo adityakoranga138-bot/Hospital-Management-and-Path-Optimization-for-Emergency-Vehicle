@@ -105,6 +105,23 @@ PBL-Project/
 * **Exception Handling**: Handles exceptional situations such as unavailable beds, invalid locations, and missing patients.
 * **File Handling**: Maintains patient records, pharmacy inventory, and invoice information.
 
+## Screenshots
+
+### Dashboard Overview
+![Dashboard](screenshots/dashboard.png)
+
+### Emergency Registration
+![Emergency Registration](screenshots/emergency.png)
+
+### Ambulance Dispatch
+![Ambulance Dispatch](screenshots/dispatch.png)
+
+### Ward Occupancy
+![Ward Occupancy](screenshots/beds.png)
+
+### Pharmacy Management
+![Pharmacy](screenshots/pharmacy.png)
+
 ## Notes
 
 * This project is developed for academic and educational purposes.
