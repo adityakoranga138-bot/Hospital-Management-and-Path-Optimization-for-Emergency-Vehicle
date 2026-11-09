@@ -1,4 +1,4 @@
-# SmartCare – Emergency Hospital Management System
+# Hospital Management and Path Optimization for Emergency Vehicle
 
 A C++-based Emergency Hospital Management System designed to streamline emergency patient registration, ambulance dispatch, hospital bed allocation, pharmacy inventory management, and patient discharge. The system uses Data Structures and Algorithms (DSA), Object-Oriented Programming (OOP), and a web-based dashboard connected to a C++ backend through an HTTP server.
 
@@ -82,7 +82,7 @@ The frontend communicates with the C++ backend through the following HTTP endpoi
 ## Project Structure
 
 ```
-PBL-Project/
+Hospital-Management-and-Path-Optimization-for-Emergency-Vehicle/
 │
 ├── dashboard/
 ├── screenshots/
@@ -142,11 +142,3 @@ PBL-Project/
 * Real-time ambulance tracking.
 * Online appointment and hospital registration facilities.
 * Enhanced reporting and analytics for hospital administration.
-
-## Team Project
-
-Developed as part of the Problem-Based Learning (PBL) project.
-
-**Project**: SmartCare – Emergency Hospital Management System
-
-**Repository**: PBL-Project
