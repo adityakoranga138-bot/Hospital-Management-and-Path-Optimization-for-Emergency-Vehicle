@@ -85,6 +85,10 @@ The frontend communicates with the C++ backend through the following HTTP endpoi
 Hospital-Management-and-Path-Optimization-for-Emergency-Vehicle/
 │
 ├── dashboard/
+│   ├── app.js
+│   ├── index.html
+│   └── styles.css
+│
 ├── screenshots/
 │   ├── dashboard.png
 │   ├── emergency.png
